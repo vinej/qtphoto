@@ -150,7 +150,8 @@ void Visionneuse::paintEvent(QPaintEvent*)
         f.setPointSize(16); p.setFont(f);
         p.drawText(rect().adjusted(0, 0, 0, -h), Qt::AlignCenter,
             "o  choisir un dossier          ←  →  parcourir\n"
-            "Entrée  ouvrir dans GIMP      Ctrl+Entrée  Krita      Suppr  effacer      F11  plein écran");
+            "Entrée  GIMP      Ctrl+Entrée  Krita      Shift+Entrée  nomacs\n"
+            "Suppr  effacer      F11  plein écran");
     }
 }
 
@@ -168,8 +169,13 @@ void Visionneuse::keyPressEvent(QKeyEvent* e)
     case Qt::Key_O:      choisirDossier(); break;
     case Qt::Key_Delete: supprimer(); break;
     case Qt::Key_Return: case Qt::Key_Enter:
-        // Entrée → GIMP ; Ctrl+Entrée → Krita (sa demande du 9 sept.)
-        ouvrirDans(e->modifiers() & Qt::ControlModifier ? "krita" : "gimp"); break;
+        // Entrée → GIMP ; Ctrl+Entrée → Krita ; Shift+Entrée → nomacs
+        // (ses demandes du 9 sept.). nomacs est natif : pas de lanceur
+        // jyvux-nomacs, ouvrirDans() retombe sur « nomacs » dans le PATH.
+        if (e->modifiers() & Qt::ControlModifier)    ouvrirDans("krita");
+        else if (e->modifiers() & Qt::ShiftModifier) ouvrirDans("nomacs");
+        else                                         ouvrirDans("gimp");
+        break;
     case Qt::Key_F11: case Qt::Key_F:
         isFullScreen() ? showNormal() : showFullScreen(); break;
     case Qt::Key_Escape:
