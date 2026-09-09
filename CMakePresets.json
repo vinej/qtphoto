@@ -1,0 +1,17 @@
+{
+  "version": 4,
+  "cmakeMinimumRequired": { "major": 3, "minor": 21, "patch": 0 },
+  "configurePresets": [
+    { "name": "linux-base", "hidden": true, "generator": "Ninja",
+      "description": "Qt 6.11.2 dans /opt (JYVUX)",
+      "cacheVariables": { "CMAKE_PREFIX_PATH": "/opt/qt-6.11.2", "CMAKE_EXPORT_COMPILE_COMMANDS": "ON" } },
+    { "name": "linux-release", "inherits": "linux-base", "binaryDir": "${sourceDir}/build/linux-release",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" } },
+    { "name": "linux-debug", "inherits": "linux-base", "binaryDir": "${sourceDir}/build/linux-debug",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" } }
+  ],
+  "buildPresets": [
+    { "name": "linux-release", "configurePreset": "linux-release" },
+    { "name": "linux-debug",   "configurePreset": "linux-debug" }
+  ]
+}

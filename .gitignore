@@ -1,0 +1,5 @@
+# qtphoto — ce qui ne va pas dans le dépôt
+build/
+*.user
+.cache/
+compile_commands.json

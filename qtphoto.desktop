@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=qtphoto
+GenericName=Visionneuse de photos
+Comment=Parcourir un dossier de photos et les ouvrir dans GIMP
+Exec=qtphoto
+Icon=image-viewer
+Terminal=false
+Categories=Graphics;Viewer;Photography;
+Keywords=photo;image;visionneuse;gimp;
