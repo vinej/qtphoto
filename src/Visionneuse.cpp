@@ -150,7 +150,7 @@ void Visionneuse::paintEvent(QPaintEvent*)
         f.setPointSize(16); p.setFont(f);
         p.drawText(rect().adjusted(0, 0, 0, -h), Qt::AlignCenter,
             "o  choisir un dossier          ←  →  parcourir\n"
-            "Entrée  ouvrir dans GIMP        Suppr  effacer        F11  plein écran");
+            "Entrée  ouvrir dans GIMP      Ctrl+Entrée  Krita      Suppr  effacer      F11  plein écran");
     }
 }
 
@@ -167,7 +167,9 @@ void Visionneuse::keyPressEvent(QKeyEvent* e)
     case Qt::Key_End:  if (!m_photos.isEmpty()) { m_index = m_photos.size() - 1; charger(); } break;
     case Qt::Key_O:      choisirDossier(); break;
     case Qt::Key_Delete: supprimer(); break;
-    case Qt::Key_Return: case Qt::Key_Enter: ouvrirDansGimp(); break;
+    case Qt::Key_Return: case Qt::Key_Enter:
+        // Entrée → GIMP ; Ctrl+Entrée → Krita (sa demande du 9 sept.)
+        ouvrirDans(e->modifiers() & Qt::ControlModifier ? "krita" : "gimp"); break;
     case Qt::Key_F11: case Qt::Key_F:
         isFullScreen() ? showNormal() : showFullScreen(); break;
     case Qt::Key_Escape:
@@ -216,20 +218,21 @@ void Visionneuse::supprimer()
     charger();
 }
 
-// ── GIMP : par le lanceur de JYVUX, qui sait où GIMP vit (podman) ────────
+// ── GIMP, Krita : par le lanceur de JYVUX, qui sait où chacun vit (podman) ─
 
-void Visionneuse::ouvrirDansGimp()
+void Visionneuse::ouvrirDans(const QString& app)
 {
     const QString chemin = cheminCourant();
     if (chemin.isEmpty()) return;
-    // ⭐ On ne sait pas ici comment GIMP est installé — et on n'a pas à le
-    //   savoir : /usr/bin/jyvux-gimp le sait (conteneur, écran, rôle).
-    //   Repli : un « gimp » dans le PATH.
-    const QString lanceur = QFile::exists("/usr/bin/jyvux-gimp") ? "/usr/bin/jyvux-gimp" : "gimp";
+    // ⭐ On ne sait pas ici comment l'éditeur est installé — et on n'a pas à
+    //   le savoir : /usr/bin/jyvux-<app> le sait (conteneur, écran, rôle).
+    //   Repli : l'éditeur lui-même dans le PATH.
+    const QString jyvux = "/usr/bin/jyvux-" + app;
+    const QString lanceur = QFile::exists(jyvux) ? jyvux : app;
     if (QProcess::startDetached(lanceur, {chemin}))
-        dire("→ GIMP");
+        dire("→ " + app.toUpper());
     else
-        QMessageBox::warning(this, "GIMP", "Impossible de lancer " + lanceur);
+        QMessageBox::warning(this, app, "Impossible de lancer " + lanceur);
 }
 
 // ── la sonde ──────────────────────────────────────────────────────────────

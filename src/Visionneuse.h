@@ -25,7 +25,7 @@ private:
     void aller(int delta);
     void choisirDossier();
     void supprimer();
-    void ouvrirDansGimp();
+    void ouvrirDans(const QString& app);   // « gimp », « krita »…
     void dire(const QString& message);
     QString cheminCourant() const;
     static QStringList motifsSupportes();

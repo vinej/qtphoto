@@ -4,6 +4,7 @@
 //   ← →         photo précédente / suivante
 //   Suppr       effacer la photo (avec confirmation ; vers la corbeille)
 //   Entrée      ouvrir la photo dans GIMP
+//   Ctrl+Entrée ouvrir la photo dans Krita
 //   F11         plein écran        Échap / q   quitter
 //
 //   qtphoto [DOSSIER]           ouvre ce dossier (sinon le dernier visité)
